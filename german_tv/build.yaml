@@ -1,0 +1,14 @@
+---
+build_from:
+  aarch64: "ghcr.io/hassio-addons/base:16.3.2"
+  amd64:   "ghcr.io/hassio-addons/base:16.3.2"
+  armhf:   "ghcr.io/hassio-addons/base:16.3.2"
+  armv7:   "ghcr.io/hassio-addons/base:16.3.2"
+  i386:    "ghcr.io/hassio-addons/base:16.3.2"
+
+squash: false
+labels:
+  org.opencontainers.image.title: "German TV Panel"
+  org.opencontainers.image.description: "Kostenlose deutsche TV-Sender in Home Assistant"
+  org.opencontainers.image.source: "https://github.com/gregorwolf1973/ha-addon-german-tv"
+  org.opencontainers.image.licenses: "MIT"
