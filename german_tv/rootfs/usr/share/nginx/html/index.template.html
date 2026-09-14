@@ -29,6 +29,7 @@
     .sidebar-title { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.01em; }
     .btn-add { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(10,132,255,0.3); border-radius: 7px; padding: 4px 10px; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
     .btn-add:hover { background: rgba(10,132,255,0.25); }
+    .header-actions { display: flex; gap: 6px; align-items: center; }
     .search-wrap { padding: 8px 10px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     #search { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 6px 10px; font-size: 0.84rem; font-family: var(--font); outline: none; transition: border-color .2s; }
     #search:focus { border-color: var(--accent); }
@@ -94,7 +95,10 @@
 <aside id="sidebar">
   <div class="sidebar-header">
     <span class="sidebar-title">📺 TV Sender</span>
-    <button class="btn-add" id="btn-add">＋ Neu</button>
+    <span class="header-actions">
+      <button class="btn-add" id="btn-reset" title="Standard wiederherstellen: Senderliste aus der Add-on-Konfiguration">↺</button>
+      <button class="btn-add" id="btn-add">＋ Neu</button>
+    </span>
   </div>
   <div class="search-wrap">
     <input id="search" type="text" placeholder="Sender suchen…" autocomplete="off" />
@@ -315,6 +319,29 @@ $list.addEventListener("click", e => {
 });
 
 document.getElementById("btn-add").addEventListener("click", () => openModal(null));
+
+// ↺ Standard wiederherstellen: /data/channels.json löschen, Add-on-Konfig gilt wieder
+document.getElementById("btn-reset").addEventListener("click", async () => {
+  if (!confirm("Senderliste auf die Add-on-Konfiguration zurücksetzen?\nEigene Sender und Änderungen im Panel gehen dabei verloren.")) return;
+  clearTimeout(saveTimer);            // keinen alten Stand nachträglich speichern
+  try {
+    const r = await fetch("api/channels/reset", { method: "POST" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const data = await r.json();
+    const list = Array.isArray(data.channels) ? data.channels : [];
+    channels = list.map((ch, i) => ({ ...ch, _id: i }));
+    nextId   = channels.length;
+    activeId = null;
+    if (hlsInst) { hlsInst.destroy(); hlsInst = null; }
+    $video.src = ""; $video.style.display = "none";
+    $ph.style.display = ""; $err.style.display = "none"; $infoBar.style.display = "none";
+    renderList();
+    showToast("✓ Standard wiederhergestellt");
+  } catch(e) {
+    console.warn("Reset failed:", e);
+    showToast("⚠ Zurücksetzen fehlgeschlagen");
+  }
+});
 document.getElementById("modal-cancel").addEventListener("click", closeModal);
 document.getElementById("modal-save").addEventListener("click", saveModal);
 $overlay.addEventListener("click", e => { if (e.target === $overlay) closeModal(); });

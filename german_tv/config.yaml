@@ -1,7 +1,7 @@
 ---
 name: "German TV Panel"
 description: "Kostenlose deutsche TV-Sender (ARD, ZDF, Arte, …) als Seitenleisten-Panel in Home Assistant."
-version: "1.0.5"
+version: "1.0.6"
 slug: "german_tv"
 init: false
 homeassistant: "2023.1.0"
@@ -10,9 +10,7 @@ url: "https://github.com/gregorwolf1973/ha-addon-german-tv"
 arch:
   - aarch64
   - amd64
-  - armhf
   - armv7
-  - i386
 
 ingress: true
 ingress_port: 8099

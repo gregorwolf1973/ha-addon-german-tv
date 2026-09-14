@@ -4,8 +4,9 @@ Mini API-Server für German TV Panel.
 Lauscht auf 127.0.0.1:8100
 nginx proxied: location ~ ^/?api/  →  dieser Server
 
-GET  /api/channels  → aktuelle Senderliste (JSON)
-POST /api/channels  → Senderliste in /data/channels.json speichern
+GET  /api/channels        → aktuelle Senderliste (JSON)
+POST /api/channels        → Senderliste in /data/channels.json speichern
+POST /api/channels/reset  → /data/channels.json löschen, wieder Add-on-Konfiguration nutzen
 """
 import json, os, sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -25,6 +26,26 @@ def load_channels():
         except Exception:
             continue
     return []
+
+
+def load_option_channels():
+    """Senderliste aus der Add-on-Konfiguration (ohne User-Saves)."""
+    try:
+        with open(OPTIONS_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        ch = data.get("channels", []) if isinstance(data, dict) else []
+        return ch if isinstance(ch, list) else []
+    except Exception:
+        return []
+
+
+def reset_channels():
+    """Löscht /data/channels.json, damit wieder die Add-on-Konfiguration gilt."""
+    try:
+        os.remove(DATA_FILE)
+        return True
+    except FileNotFoundError:
+        return False
 
 
 def save_channels(channels):
@@ -67,7 +88,19 @@ class Handler(BaseHTTPRequestHandler):
             self._send_json(404, {"error": "not found"})
 
     def do_POST(self):
-        if self._is_channels():
+        if self._is_channels() and self.path.rstrip("/").endswith("reset"):
+            try:
+                removed = reset_channels()
+                channels = load_option_channels()
+                print(f"[api] Standard wiederhergestellt "
+                      f"(channels.json {'geloescht' if removed else 'war nicht vorhanden'}, "
+                      f"{len(channels)} Sender aus options.json)", flush=True)
+                self._send_json(200, {"ok": True, "reset": removed,
+                                      "count": len(channels), "channels": channels})
+            except Exception as e:
+                print(f"[api] FEHLER beim Zuruecksetzen: {e}", file=sys.stderr, flush=True)
+                self._send_json(500, {"error": str(e)})
+        elif self._is_channels():
             try:
                 length = int(self.headers.get("Content-Length", 0))
                 body = self.rfile.read(length)

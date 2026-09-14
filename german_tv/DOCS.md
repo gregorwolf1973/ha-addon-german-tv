@@ -15,6 +15,7 @@ Ein Home Assistant **Add-on**, das kostenlose deutsche TV-Sender (öffentlich-re
 - 🗂️ Gruppiert nach: Öffentlich-Rechtlich · News · Regional · Kinder
 - ➕ Sender im Panel **hinzufügen, bearbeiten, löschen**
 - ⚙️ Vollständig konfigurierbar über die **Add-on-Konfiguration** in HA
+- ↺ **Standard wiederherstellen** – Panel-Änderungen verwerfen und wieder die Add-on-Konfiguration nutzen
 - 🔒 Läuft als **Ingress** – kein offener Port, kein Reverse-Proxy nötig
 
 ---
@@ -34,14 +35,14 @@ https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repositor
 **Option B: Manuell**
 
 1. Home Assistant öffnen
-2. **Einstellungen → Add-ons → Add-on-Store**
+2. **Einstellungen → Apps → App installieren**
 3. Oben rechts: **⋮ → Repositories**
 4. URL eintragen: `https://github.com/gregorwolf1973/ha-addon-german-tv`
 5. **Hinzufügen** klicken
 
 ### Schritt 2 – Add-on installieren
 
-1. Im Add-on-Store nach **"German TV Panel"** suchen
+1. In der App-Übersicht nach **"German TV Panel"** suchen
 2. **Installieren** klicken
 3. Nach der Installation: **Starten**
 4. Optional: **"In Seitenleiste anzeigen"** aktivieren
@@ -73,6 +74,15 @@ channels:
 | `category` | ➖ | Kategorie-Gruppe |
 
 > **Tipp:** Senderänderungen im Panel (＋ / ✏️ / 🗑️) werden automatisch in `/data/channels.json` gespeichert und bleiben auch nach einem Neustart erhalten. Sobald diese Datei existiert, hat sie Vorrang vor der Senderliste in der Add-on-Konfiguration.
+
+### ↺ Standard wiederherstellen
+
+Damit die Senderliste aus der Add-on-Konfiguration wieder greift, gibt es im Panel oben in der Seitenleiste die Schaltfläche **↺** (neben **＋ Neu**):
+
+1. **↺** klicken und die Rückfrage bestätigen
+2. Das Add-on löscht `/data/channels.json` und lädt sofort die Sender aus der Add-on-Konfiguration
+
+Eigene Sender und Änderungen, die nur im Panel gemacht wurden, gehen dabei verloren. Technisch dahinter: `POST api/channels/reset`.
 
 ---
 

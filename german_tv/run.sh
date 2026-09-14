@@ -4,7 +4,7 @@
 # Priorität: /data/channels.json (User-Saves) > /data/options.json (HA-Konfig)
 # ==============================================================================
 
-bashio::log.info "Starting German TV Panel v1.0.5..."
+bashio::log.info "Starting German TV Panel v1.0.6..."
 
 python3 << 'PYEOF'
 import json, sys, os
