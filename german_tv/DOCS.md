@@ -1,5 +1,7 @@
 # 📺 German TV Panel – Home Assistant Add-on
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/gregorwolf1973)
+
 Ein Home Assistant **Add-on**, das kostenlose deutsche TV-Sender (öffentlich-rechtlich) direkt als Ingress-Panel in deine Seitenleiste bringt.
 
 [![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fgregorwolf1973%2Fha-addon-german-tv)
@@ -70,7 +72,7 @@ channels:
 | `logo` | ➖ | Logo-Bild URL |
 | `category` | ➖ | Kategorie-Gruppe |
 
-> **Tipp:** Senderänderungen im Panel (＋ / ✏️ / 🗑️) sind nur für die aktuelle Browser-Sitzung gültig. Dauerhafte Änderungen immer in der Add-on-Konfiguration vornehmen.
+> **Tipp:** Senderänderungen im Panel (＋ / ✏️ / 🗑️) werden automatisch in `/data/channels.json` gespeichert und bleiben auch nach einem Neustart erhalten. Sobald diese Datei existiert, hat sie Vorrang vor der Senderliste in der Add-on-Konfiguration.
 
 ---
 

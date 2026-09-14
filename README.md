@@ -1,5 +1,7 @@
 # German TV Add-on Repository for Home Assistant
 
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/gregorwolf1973)
+
 Dieses Repository enthält das **German TV Panel** Add-on für Home Assistant.
 
 ## Add-on Repository hinzufügen
